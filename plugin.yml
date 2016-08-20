@@ -1,0 +1,16 @@
+name: DevTools
+path: src/chell_uoxou/devtools.php
+main: DevTools\DevTools
+version: 0.1.0
+api: 1.6.4_Dev
+load: STARTUP
+author: chell_uoxou
+description: Add some useful commands for PHPPO developers.
+commands:
+ icl:
+  permission: .command
+  usage: "icl <reload|add|del> <name> <path>"
+permissions:
+ icl.command:
+  default: root
+  description: "allow all command"
