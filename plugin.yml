@@ -7,10 +7,13 @@ load: STARTUP
 author: chell_uoxou
 description: Add some useful commands for PHPPO developers.
 commands:
- icl:
-  permission: .command
-  usage: "icl <reload|add|del> <name> <path>"
+ makephar:
+  permission: makephar.command
+  usage: "makephar <Path|PluginName> / <system>"
+ vardump:
+  permission: vardump.command
+  usage: "vardump <Variable Name> / <Variable Name> <Class Name>"
 permissions:
- icl.command:
+ makephar.command:
   default: root
   description: "allow all command"
