@@ -53,6 +53,7 @@ class DevTools extends systemProcessing{
 		global $raw_input;
 		global $currentdirectory;
 		global $poPath;
+		global $plugindata;
 		$myPhar = new \phppo\system\myPhar;
 		$messageCount = count($aryTipeTxt);
 		if ($messageCount <= 1) {
@@ -87,7 +88,7 @@ class DevTools extends systemProcessing{
 					$this->info("\x1b[38;5;83mSuccess. \x1b[38;5;145m:" . $pharpath);
 					$this->info("File size:" . $pharstat["size"] . "byte");
 				}
-			} else {
+			}else{
 				$allpath = substr($raw_input,9);
 				$allpath = rtrim($allpath,"\"");
 				$allpath = ltrim($allpath,"\"");
@@ -110,8 +111,30 @@ class DevTools extends systemProcessing{
 						}
 					}
 				}else{
-					$this->throwError("指定されたパスにディレクトリやファイルは存在しません。");
-					return false;
+					if (array_key_exists($aryTipeTxt[1],$plugindata)) {
+						$pluginName = $aryTipeTxt[1];
+						$allpath = $currentdirectory;
+						$filename = $plugindata[$pluginName]["name"];
+						// echo $aryTipeTxt[1] . PHP_EOL;//////////////////////////////////
+						// echo $filename . PHP_EOL;//////////////////////////////////
+						// echo $allpath . PHP_EOL;//////////////////////////////////
+						$this->info("\x1b[38;5;227mCreateing...");
+						$pharpath = $currentdirectory . "/{$filename}.phar";
+						// echo $pharpath . PHP_EOL;//////////////////////////////////
+						$phar = new \Phar($pharpath, 0, "{$filename}.phar");
+						try {
+							$phar->buildFromDirectory($allpath);
+						} catch (Exception $e) {
+							$this->info("作成に失敗しました。:{$e}","critical");
+						}
+						$pharstat = stat($pharpath);
+						$this->info("\x1b[38;5;83mSuccess. \x1b[38;5;145m:" . $pharpath);
+						$this->info("File size:" . $pharstat["size"] . "byte");
+					}else{
+						// echo $aryTipeTxt[1];//////////////////////////////////
+						$this->throwError("指定されたパスにディレクトリやファイルは存在しないか、指定した名前のプラグインは存在しません。");
+						return false;
+					}
 				}
 				// $dir = '';
 				// $dirCount = "";
